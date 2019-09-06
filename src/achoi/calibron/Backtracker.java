@@ -26,16 +26,16 @@ public class Backtracker {
 
 	Rect board = new Rect(56, 56);
 	Rect[] pieces = {
-			new Rect(32, 11),
-			new Rect(32, 10),
-			new Rect(28, 14),
-			new Rect(28, 7),
-			new Rect(28, 6),
-			new Rect(21, 18, 2), // x2
-			new Rect(21, 14, 2), // x2
-			new Rect(17, 14),
-			new Rect(14, 4),
-			new Rect(10, 7)
+			new Rect(28, 14),    // area 392
+			new Rect(21, 18, 2), // area 378 (x2)
+			new Rect(32, 11),    // area 352
+			new Rect(32, 10),    // area 320
+			new Rect(21, 14, 2), // area 294 (x2)
+			new Rect(17, 14),    // area 238
+			new Rect(28, 7),     // area 196
+			new Rect(28, 6),     // area 168
+			new Rect(10, 7),     // area 70
+			new Rect(14, 4),     // area 56
 	};
 
 	Rect[] rotated = new Rect[pieces.length];
@@ -49,7 +49,7 @@ public class Backtracker {
 	void doProblem() {
 
 		// Reversing the piece list increases the number of iterations before finding a solution
-		// from 11_970 to 1_262_578.
+		// from 1_910 to 1_001_773.
 		// Collections.reverse(Arrays.asList(pieces));
 
 		for (int i=0; i<pieces.length; i++) {
@@ -88,7 +88,7 @@ public class Backtracker {
 	// calling Deque.removeLast() is more convenient than List.remove(List.size() - 1). :)
 	Deque<Rect> answer = new ArrayDeque<>();
 
-	// true:     11_970 backtracks
+	// true:      1_910 backtracks
 	// false: 5_485_425 backtracks, 8 solutions found (4 rotations * 2 mirrors)
 	boolean stopAfterFirstSolution = true;
 
