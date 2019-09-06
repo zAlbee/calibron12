@@ -31,10 +31,8 @@ public class Backtracker {
 			new Rect(28, 14),
 			new Rect(28, 7),
 			new Rect(28, 6),
-			new Rect(21, 18),
-			new Rect(21, 18),
-			new Rect(21, 14),
-			new Rect(21, 14),
+			new Rect(21, 18, 2), // x2
+			new Rect(21, 14, 2), // x2
 			new Rect(17, 14),
 			new Rect(14, 4),
 			new Rect(10, 7)
@@ -44,17 +42,21 @@ public class Backtracker {
 
 	boolean[] bools = {true, false};
 
-	boolean[] used = new boolean[pieces.length];
+	int[] pieceCount = new int[pieces.length];
+
+	int totalPieces; // 12
 
 	void doProblem() {
 
 		// Reversing the piece list increases the number of iterations before finding a solution
-		// from 32_693 to 3_639_002.
+		// from 11_970 to 1_262_578.
 		// Collections.reverse(Arrays.asList(pieces));
 
 		for (int i=0; i<pieces.length; i++) {
 			Rect pc = pieces[i];
 			rotated[i] = new Rect(pc.w, pc.h);
+			pieceCount[i] = pc.count;
+			totalPieces += pc.count;
 		}
 
 		// A heap-based priority queue keeps the lowest element at the top of the heap.
@@ -86,8 +88,8 @@ public class Backtracker {
 	// calling Deque.removeLast() is more convenient than List.remove(List.size() - 1). :)
 	Deque<Rect> answer = new ArrayDeque<>();
 
-	// true:      32_693 backtracks
-	// false: 17_883_061 backtracks, 32 solutions found
+	// true:     11_970 backtracks
+	// false: 5_485_425 backtracks, 8 solutions found (4 rotations * 2 mirrors)
 	boolean stopAfterFirstSolution = true;
 
 	/**
@@ -99,13 +101,13 @@ public class Backtracker {
 	 * @return true if solution has been found, otherwise false
 	 */
 	boolean search(int i, PriorityQueue<Edge> edges) {
-		if (i == pieces.length) {
+		if (i == totalPieces) {
 			sout.println(answer);
 			return stopAfterFirstSolution;
 		}
 
 		for (int j=0; j<pieces.length; j++) {
-			if (used[j]) continue;
+			if (pieceCount[j] == 0) continue;
 
 			for (boolean rotate : bools) {
 
@@ -117,7 +119,7 @@ public class Backtracker {
 				if (insertRect(edgesCopy, piece)) {
 					// the piece fits. continue searching this path
 
-					used[j] = true;
+					pieceCount[j]--;
 
 					answer.addLast(piece);
 
@@ -131,7 +133,7 @@ public class Backtracker {
 					// else backtrack
 					answer.removeLast();
 
-					used[j] = false;
+					pieceCount[j]++;
 				}
 			}
 		}
@@ -226,9 +228,14 @@ public class Backtracker {
 	static class Rect {
 		int h;
 		int w;
+		int count;
 		Rect(int h, int w) {
+			this(h, w, 1);
+		}
+		Rect(int h, int w, int c) {
 			this.h = h;
 			this.w = w;
+			this.count = c;
 		}
 		public String toString() {
 			return "(" + h + "," + w + ")";
