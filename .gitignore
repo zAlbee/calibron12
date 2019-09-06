@@ -1,0 +1,8 @@
+# Compiled code
+*.class
+bin/
+
+# Eclipse IDE
+.classpath
+.project
+.settings
