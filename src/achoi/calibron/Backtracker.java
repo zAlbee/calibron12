@@ -21,7 +21,9 @@ public class Backtracker {
 	static PrintStream sout = System.out, serr = System.err;
 
 	public static void main(String[] args) {
+		long start = System.nanoTime();
 		new Backtracker().doProblem();
+		System.out.println((System.nanoTime() - start) / 1000_000.0 + " milliseconds");
 	}
 
 	Rect board = new Rect(56, 56);
